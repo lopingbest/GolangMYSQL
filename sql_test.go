@@ -34,4 +34,19 @@ func TestQuerySql(t *testing.T) {
 		panic(err)
 	}
 	defer rows.Close()
+
+	//selama masih ada data di rows, maka akan terus diambil
+	for rows.Next() {
+		var id, name string
+		//didalam kurung dimasukan parameterdari apa yang akan  kita ambil
+		//Pointer dipakai karena kita akan ngeset data dari parameter. Kalo enggak pointer, maka data tidak akan dipakai
+		err = rows.Scan(&id, &name)
+		//kalo data sudah tidak ada makan akan muncul panic
+		if err != nil {
+			panic(err)
+		}
+		//output
+		fmt.Println("Id:", id)
+		fmt.Println("Name:", name)
+	}
 }
