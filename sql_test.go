@@ -182,3 +182,27 @@ func TestExecSqlParameter(t *testing.T) {
 
 	fmt.Println("Success insert new customer")
 }
+
+func TestAutoIncrement(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+
+	username := "galih@gmail.com"
+	comment := "test"
+
+	script := "INSERT INTO comments(email, comment) VALUES(?,?)"
+	//exec tidak akan mengembalikan result
+	result, err := db.ExecContext(ctx, script, username, comment)
+	if err != nil {
+		panic(err)
+	}
+	//membalikan type data lastId
+	insertId, err := result.LastInsertId()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Success insert new comment with id", insertId)
+}
