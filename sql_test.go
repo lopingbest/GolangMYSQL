@@ -106,6 +106,7 @@ func TestSqlInjection(t *testing.T) {
 
 	ctx := context.Background()
 
+	//sql dari user
 	username := "admin'; #"
 	password := "salah"
 
@@ -118,6 +119,7 @@ func TestSqlInjection(t *testing.T) {
 	}
 	defer rows.Close()
 
+	//hanya satu data
 	if rows.Next() {
 		var username string
 		err := rows.Scan(&username)
