@@ -238,3 +238,40 @@ func TestPrepareStatement(t *testing.T) {
 	}
 
 }
+
+func TestTransaction(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+	//memulai koneksi
+	tx, err := db.Begin()
+	if err != nil {
+		panic(err)
+	}
+
+	script := "INSERT INTO comments(email,comment) VALUES(?,?)"
+	//do transaction
+	for i := 0; i < 10; i++ {
+		email := "galih" + strconv.Itoa(i) + "gmail.com"
+		comment := "Komentar ke " + strconv.Itoa(i)
+		//sql script sudah di binding di atas
+		result, err := tx.ExecContext(ctx, script, email, comment)
+		if err != nil {
+			panic(err)
+		}
+		id, err := result.LastInsertId()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("Comment Id", id)
+	}
+
+	//untuk meneruskan transaksi
+	//err = tx.Rollback()
+	//untuk mengembalikan transaksi
+	err = tx.Rollback()
+	if err != nil {
+		panic(err)
+	}
+}
