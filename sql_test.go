@@ -142,6 +142,7 @@ func TestSqlInjectionSafe(t *testing.T) {
 	username := "admin"
 	password := "admin"
 
+	//sql dengan parameter
 	script := "SELECT username FROM user WHERE username = ? AND password = ? LIMIT 1"
 	fmt.Println(script)
 	rows, err := db.QueryContext(ctx, script, username, password)
